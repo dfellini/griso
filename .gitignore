@@ -39,3 +39,5 @@ package.json
 /cypress/screenshots
 
 /json/data.json
+
+/bugmoto.sqlite3

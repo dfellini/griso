@@ -1,0 +1,41 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+#/data
+/test-data
+/tests
+/__tests__
+pages/test.js
+pages/test*.js
+pages/api/test.js
+# misc
+.DS_Store
+.env.*
+.env.local
+.env.local.hold
+.env.hold
+.env.production
+.env.hold
+.env.development
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*
+.eslintrc.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package.json
+
+# Next.js
+/.next
+/rest-tests
+
+.vscode/settings.json
+
+/docs
+/cypress/videos
+/cypress/screenshots
+
+/json/data.json

@@ -7,7 +7,7 @@ export const metadata = {
   title: {
     template: '%s - BugMoto',
     default:
-      'SBugMoto - Motorcycles and adventures.',
+      'BugMoto - Motorcycles and adventures.',
   },
   description:
     'Whether you’re a seasoned rider, a returning motorcyclist, or just someone who loves the open road, this is a space for inspiring stories, insightful videos, and a few laughs along the way.',

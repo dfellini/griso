@@ -25,13 +25,14 @@ import { getAllArticles } from '@/lib/articles'
 import { FaMotorcycle } from "react-icons/fa";
 
 
-const videos = await fetch(
-  `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&order=date&type=video&key=${process.env.YOUTUBE_KEY}`,
-  { next: { revalidate: 180 } }
-).then((res) => res.json());
+
 
 export default async function Home() {
   
+  const videos = await fetch(
+  `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&order=date&type=video&key=${process.env.YOUTUBE_KEY}`,
+  { next: { revalidate: 180 } }
+).then((res) => res.json());
   return (
     <>
       <Container className="mt-9">

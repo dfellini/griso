@@ -1,18 +1,14 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import clsx from 'clsx'
+import Image from "next/image";
+import Link from "next/link";
+import clsx from "clsx";
 
-import { Container } from '@/components/Container'
-import {
-  YouTubeIcon,
-  InstagramIcon,
-
-} from '@/components/SocialIcons'
-import portraitImage from '@/images/photos/bug-5.jpg'
+import { Container } from "@/components/Container";
+import { YouTubeIcon, InstagramIcon } from "@/components/SocialIcons";
+import portraitImage from "@/images/photos/bug-5.jpg";
 
 function SocialLink({ className, href, children, icon: Icon }) {
   return (
-    <li className={clsx(className, 'flex')}>
+    <li className={clsx(className, "flex")}>
       <Link
         href={href}
         className="group flex text-sm font-medium text-zinc-800 transition hover:text-teal-500 dark:text-zinc-200 dark:hover:text-teal-500"
@@ -21,7 +17,7 @@ function SocialLink({ className, href, children, icon: Icon }) {
         <span className="ml-4">{children}</span>
       </Link>
     </li>
-  )
+  );
 }
 // test test two
 function MailIcon(props) {
@@ -32,14 +28,14 @@ function MailIcon(props) {
         d="M6 5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H6Zm.245 2.187a.75.75 0 0 0-.99 1.126l6.25 5.5a.75.75 0 0 0 .99 0l6.25-5.5a.75.75 0 0 0-.99-1.126L12 12.251 6.245 7.187Z"
       />
     </svg>
-  )
+  );
 }
 
 export const metadata = {
-  title: 'About',
+  title: "About",
   description:
-    'I’m Spencer Sharp. I live in New York City, where I design the future.',
-}
+    "I’m Spencer Sharp. I live in New York City, where I design the future.",
+};
 
 export default function About() {
   return (
@@ -57,32 +53,57 @@ export default function About() {
         </div>
         <div className="lg:order-first lg:row-span-2">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-            I'm Bug, an avid motorcycle enthusiast and the creator
-            of BugMoto.
+            I'm Bug, an avid motorcycle enthusiast and the creator of BugMoto.
           </h1>
           <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
             <p>
-            I live in the Pacific Northwest, but I was born and raised in the Boston area. I’m super passionate about motorcycles, and
-            I believe they are not only fun, viable transportation options, but the key to a healthy, 
-            happy and youthful life.
+              My name is Dan Fellini, but on the mean streets of Portland I'm
+              known as Bug.
             </p>
             <p>
-              In my early 30s I gave up riding and moved to Portland, OR. Only recently did I start riding again, and it’s dramatically changed my life.
+              I live in the Pacific Northwest, but I was born and raised in the
+              Boston area. I’m super passionate about motorcycles, and I believe
+              they are not only fun, viable transportation options, but the key
+              to a healthy, happy and youthful life.
             </p>
             <p>
-              My goal with this channel is to inspire. To bring the same level of enthusiasm I have for riding to my content, and hopefully spark something within you.
+              In my early 30s I gave up riding and moved to Portland, OR. Only
+              recently did I start riding again, and it’s dramatically changed
+              my life.
             </p>
             <p>
-              If you think you’re too old, too afraid, too whatever… Give it another chance. Try riding and see if it changes you the way it’s changed me.
+              My goal with this channel is to inspire. To bring the same level
+              of enthusiasm I have for riding to my content, and hopefully spark
+              something within you.
             </p>
+            <p>
+              If you think you’re too old, too afraid, too whatever… Give it
+              another chance. Try riding and see if it changes you the way it’s
+              changed me.
+            </p>
+            <p>
+              When I'm not on a motorcycle, I'm probably coding. My background
+              is in software development, content production and journalism. I
+              have a mass communications (print journalism & radio) degree from
+              Emerson College in Boston, MA. and work as a software developer
+              for a Portland-based nonprofit.
+            </p>
+            <p>I'm happily married to LadyBug.</p>
           </div>
         </div>
         <div className="lg:pl-20">
           <ul role="list">
-            <SocialLink href="https://youtube.com/@bugmotochannel" icon={YouTubeIcon}>
+            <SocialLink
+              href="https://youtube.com/@bugmotochannel"
+              icon={YouTubeIcon}
+            >
               Follow on YouTube
             </SocialLink>
-            <SocialLink href="https://instagram.com/bugmotochannel" icon={InstagramIcon} className="mt-4">
+            <SocialLink
+              href="https://instagram.com/bugmotochannel"
+              icon={InstagramIcon}
+              className="mt-4"
+            >
               Follow on Instagram
             </SocialLink>
 
@@ -97,5 +118,5 @@ export default function About() {
         </div>
       </div>
     </Container>
-  )
+  );
 }

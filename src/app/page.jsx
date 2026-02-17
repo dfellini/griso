@@ -1,51 +1,59 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import clsx from 'clsx'
+import Image from "next/image";
+import Link from "next/link";
+import clsx from "clsx";
 
-import { Button } from '@/components/Button'
-import { Card } from '@/components/Card'
-import { Container } from '@/components/Container'
-import {
-  YouTubeIcon,
-  InstagramIcon,
-} from '@/components/SocialIcons'
-import logoAerostich from '@/images/partners/aerostich.webp'
-import logoCyclops from '@/images/partners/cyclops.webp'
-import logoLoneRider from '@/images/partners/lone-rider.svg'
-import logoChigee from '@/images/partners/chigee.avif'
-import logoVeridian from '@/images/partners/veridian.png'
-import logoStegra from '@/images/partners/stegra.png'
-import logoSabatino from '@/images/partners/sabatino.png'
-import image1 from '@/images/photos/bug-4.jpg'
-import image2 from '@/images/photos/bug-2.jpg'
-import image3 from '@/images/photos/bug-3.jpg'
-import image4 from '@/images/photos/bug-1.jpg'
-import image5 from '@/images/photos/bug-5.jpg'
-import { getAllArticles } from '@/lib/articles'
+import { Button } from "@/components/Button";
+import { Card } from "@/components/Card";
+import { Container } from "@/components/Container";
+import { YouTubeIcon, InstagramIcon } from "@/components/SocialIcons";
+import logoAerostich from "@/images/partners/aerostich.webp";
+import logoCyclops from "@/images/partners/cyclops.webp";
+import logoLoneRider from "@/images/partners/lone-rider.svg";
+import logoChigee from "@/images/partners/chigee.avif";
+import logoVeridian from "@/images/partners/veridian.png";
+import logoStegra from "@/images/partners/stegra.png";
+import logoSabatino from "@/images/partners/sabatino.png";
+import image1 from "@/images/photos/bug-4.jpg";
+import image2 from "@/images/photos/bug-2.jpg";
+import image3 from "@/images/photos/bug-3.jpg";
+import image4 from "@/images/photos/bug-1.jpg";
+import image5 from "@/images/photos/bug-5.jpg";
+import { getAllArticles } from "@/lib/articles";
 import { FaMotorcycle } from "react-icons/fa";
-
-
-
+import he from "he";
 
 export default async function Home() {
-  
   const videos = await fetch(
-  `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&order=date&type=video&key=${process.env.YOUTUBE_KEY}`,
-  { next: { revalidate: 180 } }
-).then((res) => res.json());
+    `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&order=date&type=video&key=${process.env.YOUTUBE_KEY}`,
+    { next: { revalidate: 180 } },
+  ).then((res) => res.json());
+
+  const firstVideoId = videos?.items[0]?.id?.videoId;
+
   return (
     <>
       <Container className="mt-9">
+        <h1 className="mb-8">
+          BugMoto: A passion for motorcycles and the places they take us.
+        </h1>
+        <div className="overline">Latest YouTube Video</div>
+        <iframe
+          src={`https://www.youtube.com/embed/${firstVideoId}`}
+          allowFullScreen
+          className="aspect-video mt-2 mb-8"
+        />
+
         <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100 mb-4">
-            A passion for motorcycles and the places they take us.
-          </h1>
-           <h2 className="text-2xl font-bold tracking-tight text-zinc-800 sm:text-2xl dark:text-zinc-100">
-           Welcome to BugMoto. Let’s ride together.
-           </h2>
+          <h2 className="text-2xl font-bold tracking-tight text-zinc-800 sm:text-2xl dark:text-zinc-100">
+            Welcome to BugMoto. Let’s ride together.
+          </h2>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            Whether you’re a seasoned rider, a returning motorcyclist, or just someone who loves the open road, this is a space for inspiring stories, insightful videos, and a few laughs along the way.<br />
-            Join us in building a lasting community of ‘older’ riders who share a passion for motorcycles, riding and living every moment.
+            Whether you’re a seasoned rider, a returning motorcyclist, or just
+            someone who loves the open road, this is a space for inspiring
+            stories, insightful videos, and a few laughs along the way.
+            <br />
+            Join us in building a lasting community of ‘older’ riders who share
+            a passion for motorcycles, riding and living every moment.
           </p>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400 text-right">
             – bug
@@ -67,11 +75,10 @@ export default async function Home() {
       <Photos />
       <Container className="mt-24 md:mt-28">
         <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
-          <div className="flex flex-col gap-8">
-          <h2 className="text-2xl font-bold tracking-tight text-zinc-800 sm:text-2xl dark:text-zinc-100">
-           BugMoto on YouTube
-           </h2>
-            {videos.items.map((video) => (
+          <div className="flex flex-col gap-4">
+            <div className="overline">More YouTube videos from BugMoto</div>
+            {/* Remove the first video since it's already displayed above */}
+            {videos.items.slice(1).map((video) => (
               <Video key={video.etag} video={video} />
             ))}
           </div>
@@ -82,12 +89,17 @@ export default async function Home() {
         </div>
       </Container>
     </>
-  )
+  );
 }
 
-
 function Photos() {
-  let rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2']
+  let rotations = [
+    "rotate-2",
+    "-rotate-2",
+    "rotate-2",
+    "rotate-2",
+    "-rotate-2",
+  ];
 
   return (
     <div className="mt-16 sm:mt-20">
@@ -96,7 +108,7 @@ function Photos() {
           <div
             key={image.src}
             className={clsx(
-              'relative w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800',
+              "relative w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800",
               rotations[imageIndex % rotations.length],
             )}
           >
@@ -112,7 +124,7 @@ function Photos() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function MailIcon(props) {
@@ -135,37 +147,36 @@ function MailIcon(props) {
         className="stroke-zinc-400 dark:stroke-zinc-500"
       />
     </svg>
-  )
+  );
 }
 
-
-
-
 function Video({ video }) {
+  console.log(video);
   return (
+    <>
+      <Card as="article" className="mb-2">
+        <Card.Title
+          href={`https://www.youtube.com/watch?v=${video.id.videoId}`}
+        >
+          {he.decode(video.snippet.title)}
+        </Card.Title>
+        <Image
+          src={video.snippet.thumbnails.high.url}
+          alt={he.decode(video.snippet.title)}
+          width={640}
+          height={360}
+          className="rounded-md aspect-video object-cover mt-2"
+        />
+        <div className="text-xs mt-2 font-medium text-zinc-400 dark:text-zinc-500">
+          Released on {new Date(video.snippet.publishedAt).toLocaleDateString()}
+        </div>
 
-    <Card as="article">
-      <Card.Title href={`https://www.youtube.com/watch?v=${video.id.videoId}`}>
-        {video.snippet.title}
-      </Card.Title>
-      <Image
-        src={video.snippet.thumbnails.high.url}
-        alt={video.snippet.title}
-        width={640}
-        height={360}
-        className="rounded-md aspect-video object-cover"
-
-      />
-      <Card.Eyebrow as="time" dateTime={video.snippet.publishedAt} decorate>
-       Released on {new Date(video.snippet.publishedAt).toLocaleDateString()}
-      </Card.Eyebrow>
-      <Card.Description>
-      {video.snippet.description}
-      </Card.Description>
-      <Card.Cta>Watch the video on YouTube</Card.Cta>
-    </Card>
-
-  )
+        <Card.Description>{video.snippet.description}</Card.Description>
+        <Card.Cta>Watch the video on YouTube</Card.Cta>
+      </Card>
+      <hr className="border-zinc-200 dark:border-zinc-500/40" />
+    </>
+  );
 }
 
 function SocialLink({ icon: Icon, ...props }) {
@@ -173,7 +184,7 @@ function SocialLink({ icon: Icon, ...props }) {
     <Link className="group -m-1 p-1" {...props}>
       <Icon className="h-6 w-6 fill-zinc-500 transition group-hover:fill-zinc-600 dark:fill-zinc-400 dark:group-hover:fill-zinc-300" />
     </Link>
-  )
+  );
 }
 
 function Newsletter() {
@@ -204,16 +215,19 @@ function Newsletter() {
         </Button>
       </div>
     </form>
-  )
+  );
 }
 
 function Company({ company }) {
-
-
   return (
     <li className="flex gap-4">
       <div className="relative mt-1 flex h-12 w-12 flex-none items-center justify-center rounded-full shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0 bg-gray-500">
-        <Image src={company.logo} alt="" className="h-12 w-12 object-contain" unoptimized  />
+        <Image
+          src={company.logo}
+          alt=""
+          className="h-12 w-12 object-contain"
+          unoptimized
+        />
       </div>
       <dl className="flex flex-auto flex-wrap gap-x-2">
         <dt className="sr-only">Company</dt>
@@ -224,57 +238,56 @@ function Company({ company }) {
         <dd className="text-xs text-zinc-500 dark:text-zinc-400">
           {company.title}
         </dd>
-
       </dl>
     </li>
-  )
+  );
 }
 
 function Partners() {
   let companies = [
     {
-      company: 'Lone Rider',
-      title: 'Motorcycle bags & accessories',
+      company: "Lone Rider",
+      title: "Motorcycle bags & accessories",
       logo: logoLoneRider,
       link: "https://www.lonerider-motorcycle.com/?rfsn=8671235.dfdd10",
     },
     {
-      company: 'Aerostich',
-      title: 'Riding suits & gear',
+      company: "Aerostich",
+      title: "Riding suits & gear",
       logo: logoAerostich,
       link: "https://aerostich.com/bugmoto",
     },
     {
-      company: 'Veridian Cruise',
-      title: 'Motorcycle cruise control',
+      company: "Veridian Cruise",
+      title: "Motorcycle cruise control",
       logo: logoVeridian,
       link: "https://veridiancruise.com/?coupon=bugmoto",
     },
     {
-      company: 'Cyclops Adventure Sports',
-      title: 'Auxiliary motorcycle lighting',
+      company: "Cyclops Adventure Sports",
+      title: "Auxiliary motorcycle lighting",
       logo: logoCyclops,
       link: "https://www.cyclopsadventuresports.com/",
     },
-        {
-      company: 'Stegra.io',
-      title: 'Navigation software',
+    {
+      company: "Stegra.io",
+      title: "Navigation software",
       logo: logoStegra,
       link: "https://stegra.io/",
     },
     {
-      company: 'Chigee',
-      title: 'CarPlay & Android Auto devices',
+      company: "Chigee",
+      title: "CarPlay & Android Auto devices",
       logo: logoChigee,
       link: "https://www.chigee.com/",
     },
-        {
-      company: 'Sabatino Moto',
-      title: "Portland's Royal Enfield dealer",
+    {
+      company: "Sabatino Moto",
+      title: "Portland's best Royal Enfield dealer",
       logo: logoSabatino,
       link: "https://www.sabatinomoto.com/",
     },
-  ]
+  ];
 
   return (
     <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
@@ -288,7 +301,6 @@ function Partners() {
           <Company key={companyIndex} company={company} />
         ))}
       </ol>
-
     </div>
-  )
+  );
 }

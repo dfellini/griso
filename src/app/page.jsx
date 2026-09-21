@@ -23,12 +23,15 @@ import { FaMotorcycle } from "react-icons/fa";
 import he from "he";
 
 export default async function Home() {
+  // Uploads playlist (channel ID with "UC" -> "UU"). Unlike search.list, this
+  // is always current — the search index can lag new uploads by days.
   const videos = await fetch(
-    `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&order=date&type=video&key=${process.env.YOUTUBE_KEY}`,
+    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UU-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&key=${process.env.YOUTUBE_KEY}`,
     { next: { revalidate: 180 } },
   ).then((res) => res.json());
 
-  const firstVideoId = videos?.items[0]?.id?.videoId;
+  const items = videos?.items ?? [];
+  const firstVideoId = items[0]?.snippet?.resourceId?.videoId;
 
   return (
     <>
@@ -48,8 +51,8 @@ export default async function Home() {
             Welcome to BugMoto. Let’s ride together.
           </h2>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            Whether you’re a seasoned rider, a returning motorcyclist, or just
-            someone who loves the open road, this is a space for inspiring
+            Whether you&rsquo;re a seasoned rider, a returning motorcyclist, or
+            just someone who loves the open road, this is a space for inspiring
             stories, insightful videos, and a few laughs along the way.
             <br />
             Join us in building a lasting community of ‘older’ riders who share
@@ -78,7 +81,7 @@ export default async function Home() {
           <div className="flex flex-col gap-4">
             <div className="overline">More YouTube videos from BugMoto</div>
             {/* Remove the first video since it's already displayed above */}
-            {videos.items.slice(1).map((video) => (
+            {items.slice(1).map((video) => (
               <Video key={video.etag} video={video} />
             ))}
           </div>
@@ -151,12 +154,11 @@ function MailIcon(props) {
 }
 
 function Video({ video }) {
-  console.log(video);
   return (
     <>
       <Card as="article" className="mb-2">
         <Card.Title
-          href={`https://www.youtube.com/watch?v=${video.id.videoId}`}
+          href={`https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}`}
         >
           {he.decode(video.snippet.title)}
         </Card.Title>

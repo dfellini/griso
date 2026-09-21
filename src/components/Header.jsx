@@ -116,6 +116,7 @@ function MobileNavigation(props) {
             <MobileNavItem href="https://youtube.com/@bugmotochannel">YouTube</MobileNavItem>
             <MobileNavItem href="https://www.instagram.com/bugmotochannel/">Instagram</MobileNavItem>
             <MobileNavItem href="/about">About Bug</MobileNavItem>
+            <MobileNavItem href="/partners">Partners</MobileNavItem>
           </ul>
         </nav>
       </PopoverPanel>
@@ -131,7 +132,7 @@ function NavItem({ href, children }) {
       <Link
         href={href}
         className={clsx(
-          'relative block px-3 py-2 transition',
+          'relative block px-3 py-2 whitespace-nowrap transition',
           isActive
             ? 'text-teal-500 dark:text-teal-400'
             : 'hover:text-teal-500 dark:hover:text-teal-400',
@@ -153,6 +154,7 @@ function DesktopNavigation(props) {
         <NavItem href="https://youtube.com/@bugmotochannel">YouTube</NavItem>
         <NavItem href="https://www.instagram.com/bugmotochannel/">Instagram</NavItem>
         <NavItem href="/about">About Bug</NavItem>
+        <NavItem href="/partners">Partners</NavItem>
       </ul>
     </nav>
   )

@@ -6,19 +6,13 @@ import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { Container } from "@/components/Container";
 import { YouTubeIcon, InstagramIcon } from "@/components/SocialIcons";
-import logoAerostich from "@/images/partners/aerostich.webp";
-import logoCyclops from "@/images/partners/cyclops.webp";
-import logoLoneRider from "@/images/partners/lone-rider.svg";
-import logoChigee from "@/images/partners/chigee.avif";
-import logoVeridian from "@/images/partners/veridian.png";
-import logoStegra from "@/images/partners/stegra.png";
-import logoSabatino from "@/images/partners/sabatino.png";
 import image1 from "@/images/photos/bug-4.jpg";
 import image2 from "@/images/photos/bug-2.jpg";
 import image3 from "@/images/photos/bug-3.jpg";
 import image4 from "@/images/photos/bug-1.jpg";
 import image5 from "@/images/photos/bug-5.jpg";
 import { getAllArticles } from "@/lib/articles";
+import { partners } from "@/lib/partners";
 import { FaMotorcycle } from "react-icons/fa";
 import he from "he";
 
@@ -173,7 +167,6 @@ function Video({ video }) {
           Released on {new Date(video.snippet.publishedAt).toLocaleDateString()}
         </div>
 
-        <Card.Description>{video.snippet.description}</Card.Description>
         <Card.Cta>Watch the video on YouTube</Card.Cta>
       </Card>
       <hr className="border-zinc-200 dark:border-zinc-500/40" />
@@ -223,7 +216,10 @@ function Newsletter() {
 function Company({ company }) {
   return (
     <li className="flex gap-4">
-      <div className="relative mt-1 flex h-12 w-12 flex-none items-center justify-center rounded-full shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0 bg-gray-500">
+      <div className={clsx(
+          "relative mt-1 flex h-12 w-12 flex-none items-center justify-center rounded-full shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:ring-0",
+          company.logoBg ?? "bg-gray-500 dark:bg-zinc-800",
+        )}>
         <Image
           src={company.logo}
           alt=""
@@ -246,63 +242,25 @@ function Company({ company }) {
 }
 
 function Partners() {
-  let companies = [
-    {
-      company: "Lone Rider",
-      title: "Motorcycle bags & accessories",
-      logo: logoLoneRider,
-      link: "https://www.lonerider-motorcycle.com/?rfsn=8671235.dfdd10",
-    },
-    {
-      company: "Aerostich",
-      title: "Riding suits & gear",
-      logo: logoAerostich,
-      link: "https://aerostich.com/bugmoto",
-    },
-    {
-      company: "Veridian Cruise",
-      title: "Motorcycle cruise control",
-      logo: logoVeridian,
-      link: "https://veridiancruise.com/?coupon=bugmoto",
-    },
-    {
-      company: "Cyclops Adventure Sports",
-      title: "Auxiliary motorcycle lighting",
-      logo: logoCyclops,
-      link: "https://www.cyclopsadventuresports.com/",
-    },
-    {
-      company: "Stegra.io",
-      title: "Navigation software",
-      logo: logoStegra,
-      link: "https://stegra.io/",
-    },
-    {
-      company: "Chigee",
-      title: "CarPlay & Android Auto devices",
-      logo: logoChigee,
-      link: "https://www.chigee.com/",
-    },
-    {
-      company: "Sabatino Moto",
-      title: "Portland's best Royal Enfield dealer",
-      logo: logoSabatino,
-      link: "https://www.sabatinomoto.com/",
-    },
-  ];
-
   return (
     <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
       <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-        {/* <BriefcaseIcon className="h-6 w-6 flex-none" /> */}
         <FaMotorcycle className="h-6 w-6 flex-none" />
-        <span className="ml-3">Channel partners, supporters & friends</span>
+        <Link href="/partners" className="ml-3 hover:text-teal-500">
+          Channel partners, supporters & friends
+        </Link>
       </h2>
       <ol className="mt-6 space-y-4">
-        {companies.map((company, companyIndex) => (
-          <Company key={companyIndex} company={company} />
+        {partners.map((company) => (
+          <Company key={company.company} company={company} />
         ))}
       </ol>
+      <Link
+        href="/partners"
+        className="mt-6 inline-block text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
+      >
+        Learn more about our partners &rarr;
+      </Link>
     </div>
   );
 }

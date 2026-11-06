@@ -11,7 +11,6 @@ import image2 from "@/images/photos/bug-2.jpg";
 import image3 from "@/images/photos/bug-3.jpg";
 import image4 from "@/images/photos/bug-1.jpg";
 import image5 from "@/images/photos/bug-5.jpg";
-import { getAllArticles } from "@/lib/articles";
 import { partners } from "@/lib/partners";
 import { FaMotorcycle, FaRegLightbulb } from "react-icons/fa";
 import he from "he";

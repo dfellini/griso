@@ -1,9 +1,13 @@
+import { Analytics } from '@vercel/analytics/next'
+
 import { Providers } from '@/app/providers'
 import { Layout } from '@/components/Layout'
+import { SITE_URL } from '@/lib/site'
 
 import '@/styles/tailwind.css'
 
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     template: '%s - BugMoto',
     default:
@@ -11,10 +15,10 @@ export const metadata = {
   },
   description:
     'Whether you’re a seasoned rider, a returning motorcyclist, or just someone who loves the open road, this is a space for inspiring stories, insightful videos, and a few laughs along the way.',
-  alternates: {
-    types: {
-      'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
-    },
+  openGraph: {
+    siteName: 'BugMoto',
+    type: 'website',
+    locale: 'en_US',
   },
 }
 
@@ -27,6 +31,7 @@ export default function RootLayout({ children }) {
             <Layout>{children}</Layout>
           </div>
         </Providers>
+        <Analytics />
       </body>
     </html>
   )

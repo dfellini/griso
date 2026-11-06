@@ -1,42 +1,27 @@
-# Spotlight
+# BugMoto
 
-Spotlight is a [Tailwind Plus](https://tailwindcss.com/plus) site template built using [Tailwind CSS](https://tailwindcss.com) and [Next.js](https://nextjs.org).
+The website for the [BugMoto YouTube channel](https://youtube.com/@bugmotochannel), live at [www.bugmoto.com](https://www.bugmoto.com). Built with Next.js and Tailwind CSS, and hosted on Vercel.
 
-## Getting started
-
-To get started with this template, first install the npm dependencies:
+## Running locally
 
 ```bash
 npm install
-```
-
-Next, create a `.env.local` file in the root of your project and set the `NEXT_PUBLIC_SITE_URL` variable to your site's public URL:
-
-```
-NEXT_PUBLIC_SITE_URL=https://example.com
-```
-
-Next, run the development server:
-
-```bash
 npm run dev
 ```
 
-Finally, open [http://localhost:3000](http://localhost:3000) in your browser to view the website.
+Then open [http://localhost:3000](http://localhost:3000).
 
-## Customizing
+## Environment variables
 
-You can start editing this template by modifying the files in the `/src` folder. The site will auto-update as you edit these files.
+Set these in `.env.local` for local development and in the Vercel project settings for production:
+
+| Variable | Used for |
+| --- | --- |
+| `YOUTUBE_KEY` | Loading the latest videos on the home page |
+| `RESEND_API_KEY` | Sending video pitches from `/pitch` through Resend |
+| `PITCH_TO_EMAIL` | The address that receives pitches |
+| `PITCH_FROM_EMAIL` | The sender, on a domain verified in Resend |
 
 ## License
 
-This site template is a commercial product and is licensed under the [Tailwind Plus license](https://tailwindcss.com/plus/license).
-
-## Learn more
-
-To learn more about the technologies used in this site template, see the following resources:
-
-- [Tailwind CSS](https://tailwindcss.com/docs) - the official Tailwind CSS documentation
-- [Next.js](https://nextjs.org/docs) - the official Next.js documentation
-- [Headless UI](https://headlessui.dev) - the official Headless UI documentation
-- [MDX](https://mdxjs.com) - the MDX documentation
+The site is based on a Tailwind Plus template. See [LICENSE.md](LICENSE.md).

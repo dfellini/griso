@@ -19,7 +19,6 @@ function SocialLink({ className, href, children, icon: Icon }) {
     </li>
   );
 }
-// test test two
 function MailIcon(props) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
@@ -34,7 +33,7 @@ function MailIcon(props) {
 export const metadata = {
   title: "About",
   description:
-    "I’m Spencer Sharp. I live in New York City, where I design the future.",
+    "I’m Bug, a Portland rider and the creator of BugMoto. I started riding again later in life, and it changed everything.",
 };
 
 export default function About() {

@@ -109,7 +109,11 @@ export function PitchForm() {
       </Field>
 
       <div className="grid gap-6 sm:grid-cols-[2fr_1fr]">
-        <Field name="title" label="Video idea" error={state.errors?.title}>
+        <Field
+          name="title"
+          label="Video idea in a nutshell (just a few words)"
+          error={state.errors?.title}
+        >
           <input type="text" required {...fieldProps("title", state)} />
         </Field>
         <Field name="type" label="Video type" error={state.errors?.type}>

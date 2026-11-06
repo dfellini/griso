@@ -28,6 +28,7 @@ export function Footer() {
                   Instagram
                 </NavLink>
                 <NavLink href="/about">About Bug</NavLink>
+                <NavLink href="/pitch">Pitch a Video</NavLink>
               </div>
               <p className="text-sm text-zinc-400 dark:text-zinc-500">
                 &copy; {new Date().getFullYear()} BugMoto. All rights reserved.

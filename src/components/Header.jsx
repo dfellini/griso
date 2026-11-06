@@ -117,6 +117,7 @@ function MobileNavigation(props) {
             <MobileNavItem href="https://www.instagram.com/bugmotochannel/">Instagram</MobileNavItem>
             <MobileNavItem href="/about">About Bug</MobileNavItem>
             <MobileNavItem href="/partners">Partners</MobileNavItem>
+            <MobileNavItem href="/pitch">Pitch a Video</MobileNavItem>
           </ul>
         </nav>
       </PopoverPanel>
@@ -155,6 +156,7 @@ function DesktopNavigation(props) {
         <NavItem href="https://www.instagram.com/bugmotochannel/">Instagram</NavItem>
         <NavItem href="/about">About Bug</NavItem>
         <NavItem href="/partners">Partners</NavItem>
+        <NavItem href="/pitch">Pitch a Video</NavItem>
       </ul>
     </nav>
   )

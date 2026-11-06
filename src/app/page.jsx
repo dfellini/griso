@@ -13,7 +13,7 @@ import image4 from "@/images/photos/bug-1.jpg";
 import image5 from "@/images/photos/bug-5.jpg";
 import { getAllArticles } from "@/lib/articles";
 import { partners } from "@/lib/partners";
-import { FaMotorcycle } from "react-icons/fa";
+import { FaMotorcycle, FaRegLightbulb } from "react-icons/fa";
 import he from "he";
 
 export default async function Home() {
@@ -81,6 +81,7 @@ export default async function Home() {
           </div>
           <div className="space-y-10 lg:pl-16 xl:pl-24">
             {/* <Newsletter /> */}
+            <PitchCard />
             <Partners />
           </div>
         </div>
@@ -238,6 +239,29 @@ function Company({ company }) {
         </dd>
       </dl>
     </li>
+  );
+}
+
+function PitchCard() {
+  return (
+    <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
+      <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+        <FaRegLightbulb className="h-6 w-6 flex-none" />
+        <Link href="/pitch" className="ml-3 hover:text-teal-500">
+          Got a video idea?
+        </Link>
+      </h2>
+      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        I&rsquo;m always looking for ideas. Tell me what you&rsquo;d like to see
+        on the channel.
+      </p>
+      <Link
+        href="/pitch"
+        className="mt-6 inline-block text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
+      >
+        Pitch me a video &rarr;
+      </Link>
+    </div>
   );
 }
 

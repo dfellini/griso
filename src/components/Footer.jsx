@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 const FOOTER_LINKS = [
+  { href: '/videos', label: 'Videos' },
   { href: 'https://youtube.com/@bugmotochannel', label: 'YouTube' },
   { href: 'https://www.instagram.com/bugmotochannel/', label: 'Instagram' },
   { href: '/about', label: 'About Bug' },

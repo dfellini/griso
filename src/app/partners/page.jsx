@@ -2,13 +2,15 @@ import Image from "next/image";
 import clsx from "clsx";
 
 import gearImage from "@/images/photos/gear.jpg";
-import { partners } from "@/lib/partners";
+import { partnerLinkRel, partners } from "@/lib/partners";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata = {
-  title: "Partners",
+export const metadata = pageMetadata({
+  title: "Motorcycle Gear & Channel Partners",
   description:
-    "The companies that support the BugMoto channel, and the gear I actually use.",
-};
+    "The companies that support the BugMoto channel and the gear I use: Insta360, Lone Rider, Aerostich, Veridian Cruise, Chigee, Pando Moto and more.",
+  path: "/partners",
+});
 
 function Partner({ partner }) {
   return (
@@ -22,15 +24,17 @@ function Partner({ partner }) {
         <Image
           src={partner.logo}
           alt=""
+          sizes="96px"
           className="h-24 w-24 object-contain"
-          unoptimized
+          // SVGs can't go through image optimization.
+          unoptimized={partner.logo.src.endsWith(".svg")}
         />
       </div>
       <h2 className="display mt-2 text-[34px] leading-[1.1]">
         <a
           href={partner.link}
           target="_blank"
-          rel="noopener noreferrer"
+          rel={partnerLinkRel(partner)}
           className="underline-offset-4 hover:underline"
         >
           {partner.company}
@@ -43,7 +47,7 @@ function Partner({ partner }) {
       <a
         href={partner.link}
         target="_blank"
-        rel="noopener noreferrer"
+        rel={partnerLinkRel(partner)}
         className="inline-flex min-h-11 items-center font-condensed text-[23px] leading-tight font-bold underline underline-offset-4 hover:text-moto-red-dark"
       >
         {partner.cta} &rarr;

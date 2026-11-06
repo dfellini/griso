@@ -1,56 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
-import he from "he";
 
 import { Button } from "@/components/Button";
 import portrait from "@/images/photos/bugportrait.jpg";
-import { partners } from "@/lib/partners";
+import { partnerLinkRel, partners } from "@/lib/partners";
+import { CHANNEL_URL } from "@/lib/site";
+import { formatVideoDate, getLatestVideos } from "@/lib/youtube";
 
-const CHANNEL_URL = "https://youtube.com/@bugmotochannel";
-
-async function getLatestVideos() {
-  try {
-    // Uploads playlist (channel ID with "UC" -> "UU"). Unlike search.list, this
-    // is always current — the search index can lag new uploads by days.
-    const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UU-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&key=${process.env.YOUTUBE_KEY}`,
-      { next: { revalidate: 180 } },
-    );
-
-    if (!response.ok) {
-      console.error(`Home page: YouTube returned ${response.status}.`);
-      return [];
-    }
-
-    const { items = [] } = await response.json();
-
-    return items.map(({ snippet }) => {
-      const [title, series] = he.decode(snippet.title).split(" | ");
-      const { maxres, standard, high } = snippet.thumbnails;
-
-      return {
-        id: snippet.resourceId.videoId,
-        title,
-        series,
-        thumbnail: (maxres ?? standard ?? high).url,
-        url: `https://www.youtube.com/watch?v=${snippet.resourceId.videoId}`,
-        publishedAt: snippet.publishedAt,
-      };
-    });
-  } catch (error) {
-    console.error("Home page: could not load videos from YouTube.", error);
-    return [];
-  }
-}
-
-function formatDate(date) {
-  return new Date(date).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
-}
+export const metadata = {
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "BugMoto: Motorcycle Reviews, Rides & Stories for Older Riders",
+    description:
+      "Motorcycle reviews, ride stories and how-tos from Bug, a Portland rider who got back on two wheels later in life. For seasoned, returning and older riders.",
+    url: "/",
+    siteName: "BugMoto",
+    type: "website",
+    locale: "en_US",
+  },
+};
 
 function PlayIcon(props) {
   return (
@@ -105,9 +73,9 @@ function LatestVideo({ video }) {
         A passion for motorcycles and the places they take us.
       </p>
       <div className="page-gutter grid gap-6 pt-8 pb-11 lg:grid-cols-[2fr_1fr] lg:items-end lg:gap-12 lg:pt-10 lg:pb-24">
-        <a
-          href={video.url}
-          aria-label={`Watch ${video.title} on YouTube`}
+        <Link
+          href={video.path}
+          aria-label={`Watch ${video.title}`}
           className="group relative block"
         >
           <Image
@@ -121,7 +89,7 @@ function LatestVideo({ video }) {
           <span className="absolute bottom-0 left-0 flex h-16 w-16 items-center justify-center bg-moto-red text-white transition-colors group-hover:bg-moto-red-dark lg:h-[104px] lg:w-[104px]">
             <PlayIcon className="h-7 w-6 lg:h-[46px] lg:w-10" />
           </span>
-        </a>
+        </Link>
         <div className="flex flex-col gap-4 lg:gap-6">
           <p className="label text-[21px] font-bold tracking-[0.08em] text-[#ff5a5a] lg:text-2xl">
             Latest video
@@ -130,12 +98,12 @@ function LatestVideo({ video }) {
           <h2 className="display text-[40px] leading-[1.12] lg:text-[clamp(3rem,4.4vw,4rem)] lg:leading-[1.08]">
             {video.title}
           </h2>
-          <a
-            href={video.url}
+          <Link
+            href={video.path}
             className="label inline-flex min-h-11 items-center text-[26px] font-bold underline-offset-[6px] hover:underline"
           >
-            Watch on YouTube &rarr;
-          </a>
+            Watch now &rarr;
+          </Link>
         </div>
       </div>
     </section>
@@ -151,8 +119,8 @@ function RecentVideos({ videos }) {
       <ol className="border-t-[5px] border-ink lg:border-t-[6px]">
         {videos.map((video, index) => (
           <li key={video.id} className="border-b-2 border-ink">
-            <a
-              href={video.url}
+            <Link
+              href={video.path}
               className="group grid grid-cols-[46px_1fr] gap-x-3.5 py-[18px] sm:grid-cols-[70px_1fr] lg:grid-cols-[96px_1fr_110px_240px] lg:items-center lg:gap-x-10 lg:py-6"
             >
               <span className="display text-[34px] leading-[1.1] text-moto-red-dark sm:text-5xl lg:text-[64px] lg:leading-none">
@@ -162,7 +130,7 @@ function RecentVideos({ videos }) {
                 {video.title}
               </span>
               <span className="col-start-2 mt-2 text-[17px] font-medium lg:col-start-auto lg:mt-0 lg:text-[19px]">
-                {formatDate(video.publishedAt)}
+                {formatVideoDate(video.publishedAt)}
               </span>
               <Image
                 src={video.thumbnail}
@@ -172,10 +140,46 @@ function RecentVideos({ videos }) {
                 sizes="240px"
                 className="hidden aspect-video w-[240px] object-cover lg:block"
               />
-            </a>
+            </Link>
           </li>
         ))}
       </ol>
+      <Button href="/videos" className="mt-8 w-full sm:w-auto">
+        See all the videos
+      </Button>
+    </section>
+  );
+}
+
+function Welcome() {
+  return (
+    <section className="border-t-2 border-ink">
+      <div className="page-gutter grid gap-6 py-12 lg:grid-cols-2 lg:gap-12 lg:py-20">
+        <h2 className="display text-[52px] leading-[1.06] lg:text-[72px]">
+          Welcome to BugMoto. Let&rsquo;s ride together.
+        </h2>
+        <div className="flex flex-col gap-5 text-[21px] leading-[1.6] lg:text-[23px]">
+          <p>
+            Whether you&rsquo;re a seasoned rider, a returning motorcyclist, or
+            just someone who loves the open road, this is a space for inspiring
+            stories, insightful videos, and a few laughs along the way.
+          </p>
+          <p>
+            Join us in building a lasting community of &lsquo;older&rsquo;
+            riders who share a passion for motorcycles, riding and living every
+            moment.
+          </p>
+          <p className="font-semibold">
+            &ndash;{" "}
+            <Link
+              href="/about"
+              className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-moto-red-dark"
+            >
+              Bug
+            </Link>
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
@@ -209,7 +213,7 @@ function PitchAndPartners() {
               <a
                 href={partner.link}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel={partnerLinkRel(partner)}
                 className="inline-flex min-h-11 items-center font-condensed text-[27px] leading-tight font-semibold underline-offset-4 hover:underline"
               >
                 {partner.company}
@@ -229,14 +233,22 @@ function PitchAndPartners() {
 }
 
 export default async function Home() {
-  const videos = await getLatestVideos();
+  let videos = [];
+
+  try {
+    videos = await getLatestVideos();
+  } catch (error) {
+    console.error("Home page: could not load videos from YouTube.", error);
+  }
+
   const [latest, ...recent] = videos;
 
   return (
     <>
-      <Hero latestUrl={latest?.url ?? CHANNEL_URL} />
+      <Hero latestUrl={latest?.path ?? "/videos"} />
       {latest && <LatestVideo video={latest} />}
       {recent.length > 0 && <RecentVideos videos={recent} />}
+      <Welcome />
       <PitchAndPartners />
     </>
   );

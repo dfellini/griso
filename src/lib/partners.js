@@ -11,6 +11,13 @@ import logoPandoMoto from "@/images/partners/pando-moto.svg";
 // Shared by the homepage box and the /partners page.
 // `description` and `cta` only show on /partners — edit freely.
 // `logoBg` (optional) overrides the gray square behind the logo on /partners.
+export function partnerLinkRel(partner) {
+  // Google asks for affiliate links to be marked as sponsored.
+  return /affiliate/i.test(partner.cta)
+    ? "sponsored noopener noreferrer"
+    : "noopener noreferrer";
+}
+
 export const partners = [
   {
     company: "Insta360",

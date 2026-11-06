@@ -2,11 +2,14 @@ import Image from "next/image";
 
 import { PitchForm } from "@/components/PitchForm";
 import desertPhoto from "@/images/photos/bug-5.jpg";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata = {
-  title: "Pitch a Video",
-  description: "Got an idea for a BugMoto video? Tell me about it.",
-};
+export const metadata = pageMetadata({
+  title: "Pitch a Video Idea",
+  description:
+    "Got an idea for a BugMoto video? A road worth riding, gear worth testing, a question you’d like answered? Pitch it to Bug here.",
+  path: "/pitch",
+});
 
 export default function Pitch() {
   return (

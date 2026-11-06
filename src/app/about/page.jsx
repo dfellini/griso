@@ -1,13 +1,17 @@
 import Image from "next/image";
 
+import { JsonLd } from "@/components/JsonLd";
 import helmetPhoto from "@/images/photos/bug-3.jpg";
 import desertPhoto from "@/images/photos/bug-5.jpg";
+import { pageMetadata, SITE_URL } from "@/lib/site";
+import { person } from "@/lib/structuredData";
 
-export const metadata = {
-  title: "About",
+export const metadata = pageMetadata({
+  title: "About Bug",
   description:
     "I’m Bug, a Portland rider and the creator of BugMoto. I started riding again later in life, and it changed everything.",
-};
+  path: "/about",
+});
 
 const FIND_ME_LINKS = [
   { href: "https://youtube.com/@bugmotochannel", label: "Follow on YouTube" },
@@ -23,6 +27,13 @@ const paragraph = "text-[21px] leading-[1.6] font-normal lg:text-[23px]";
 export default function About() {
   return (
     <>
+      <JsonLd
+        data={{
+          "@type": "ProfilePage",
+          url: `${SITE_URL}/about`,
+          mainEntity: person,
+        }}
+      />
       <section className="flex flex-col-reverse bg-moto-red lg:flex-row lg:items-stretch">
         <div className="flex flex-col justify-end px-4 py-9 sm:px-8 lg:w-1/2 lg:px-12 lg:py-16">
           <h1 className="display text-[clamp(3rem,13vw,6.25rem)] leading-[1.08] text-white lg:text-[clamp(3.5rem,6.6vw,6.25rem)]">

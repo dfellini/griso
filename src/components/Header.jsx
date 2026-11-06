@@ -16,6 +16,7 @@ import logo from '@/images/bugmoto-square.png'
 const YOUTUBE_URL = 'https://youtube.com/@bugmotochannel'
 
 const NAV_LINKS = [
+  { href: '/videos', label: 'Videos' },
   { href: '/about', label: 'About Bug' },
   { href: '/partners', label: 'Partners' },
   { href: '/pitch', label: 'Pitch a Video' },

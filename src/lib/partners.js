@@ -10,7 +10,7 @@ import logoPandoMoto from "@/images/partners/pando-moto.svg";
 
 // Shared by the homepage box and the /partners page.
 // `description` and `cta` only show on /partners — edit freely.
-// `logoBg` (optional) overrides the gray circle behind the logo.
+// `logoBg` (optional) overrides the gray square behind the logo on /partners.
 export const partners = [
   {
     company: "Insta360",
@@ -62,6 +62,7 @@ export const partners = [
     company: "Pando Moto",
     title: "Motorcycle jeans & apparel",
     logo: logoPandoMoto,
+    logoBg: "bg-white",
     link: "https://pandomoto.pxf.io/BUGMOTO",
     description:
       "Pando Moto makes protective riding jeans and apparel that look like regular clothes off the bike.",

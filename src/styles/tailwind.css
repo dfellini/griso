@@ -1,57 +1,43 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
-  --text-xs: 0.8125rem;
-  --text-xs--line-height: 1.5rem;
-  --text-sm: 0.875rem;
-  --text-sm--line-height: 1.5rem;
-  --text-base: 1rem;
-  --text-base--line-height: 1.75rem;
-  --text-lg: 1.125rem;
-  --text-lg--line-height: 1.75rem;
-  --text-xl: 1.25rem;
-  --text-xl--line-height: 2rem;
-  --text-2xl: 1.5rem;
-  --text-2xl--line-height: 2rem;
-  --text-3xl: 1.875rem;
-  --text-3xl--line-height: 2.25rem;
-  --text-4xl: 2rem;
-  --text-4xl--line-height: 2.5rem;
-  --text-5xl: 3rem;
-  --text-5xl--line-height: 3.5rem;
-  --text-6xl: 3.75rem;
-  --text-6xl--line-height: 1;
-  --text-7xl: 4.5rem;
-  --text-7xl--line-height: 1;
-  --text-8xl: 6rem;
-  --text-8xl--line-height: 1;
-  --text-9xl: 8rem;
-  --text-9xl--line-height: 1;
+  --color-moto-red: #ff0000;
+  --color-moto-red-dark: #d90000;
+  --color-moto-error: #b80000;
+  --color-ink: #0b0b0b;
+
+  --font-sans: var(--font-barlow), ui-sans-serif, system-ui, sans-serif;
+  --font-condensed: var(--font-barlow-condensed), ui-sans-serif, sans-serif;
+  --font-display: var(--font-anton), Impact, sans-serif;
 }
 
-/* create a fade-in effect for link hovers */
+@layer base {
+  html {
+    @apply bg-white text-ink antialiased;
+  }
 
-a {
-  @apply transition-colors duration-200;
-}
-a:hover {
-  @apply text-blue-600 dark:text-blue-400;
-}
+  a {
+    @apply transition-colors duration-200;
+  }
 
-h1 {
-  @apply text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100;
-}
-
-h2 {
-  @apply text-3xl font-bold tracking-tight text-zinc-800 sm:text-4xl dark:text-zinc-100;
+  :focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
 }
 
-h3 {
-  @apply text-2xl font-bold tracking-tight text-zinc-800 sm:text-3xl dark:text-zinc-100;
-}
+@layer components {
+  /* The big poster headline type that echoes the logo */
+  .display {
+    @apply font-display font-normal uppercase;
+  }
 
-.overline {
-  @apply font-bold tracking-wide text-zinc-500 uppercase dark:text-zinc-400;
+  /* The smaller condensed labels used for navigation and buttons */
+  .label {
+    @apply font-condensed font-semibold tracking-wide uppercase;
+  }
+
+  .page-gutter {
+    @apply mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12;
+  }
 }

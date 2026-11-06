@@ -1,34 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
-import clsx from "clsx";
 
-import { Container } from "@/components/Container";
-import { YouTubeIcon, InstagramIcon } from "@/components/SocialIcons";
-import portraitImage from "@/images/photos/bug-5.jpg";
-
-function SocialLink({ className, href, children, icon: Icon }) {
-  return (
-    <li className={clsx(className, "flex")}>
-      <Link
-        href={href}
-        className="group flex text-sm font-medium text-zinc-800 transition hover:text-teal-500 dark:text-zinc-200 dark:hover:text-teal-500"
-      >
-        <Icon className="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-teal-500" />
-        <span className="ml-4">{children}</span>
-      </Link>
-    </li>
-  );
-}
-function MailIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
-      <path
-        fillRule="evenodd"
-        d="M6 5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H6Zm.245 2.187a.75.75 0 0 0-.99 1.126l6.25 5.5a.75.75 0 0 0 .99 0l6.25-5.5a.75.75 0 0 0-.99-1.126L12 12.251 6.245 7.187Z"
-      />
-    </svg>
-  );
-}
+import helmetPhoto from "@/images/photos/bug-3.jpg";
+import desertPhoto from "@/images/photos/bug-5.jpg";
 
 export const metadata = {
   title: "About",
@@ -36,86 +9,116 @@ export const metadata = {
     "I’m Bug, a Portland rider and the creator of BugMoto. I started riding again later in life, and it changed everything.",
 };
 
+const FIND_ME_LINKS = [
+  { href: "https://youtube.com/@bugmotochannel", label: "Follow on YouTube" },
+  {
+    href: "https://www.instagram.com/bugmotochannel/",
+    label: "Follow on Instagram",
+  },
+  { href: "mailto:dan@bugmoto.com", label: "dan@bugmoto.com" },
+];
+
+const paragraph = "text-[21px] leading-[1.6] font-normal lg:text-[23px]";
+
 export default function About() {
   return (
-    <Container className="mt-16 sm:mt-32">
-      <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-12">
-        <div className="lg:pl-20">
-          <div className="max-w-xs px-2.5 lg:max-w-none">
+    <>
+      <section className="flex flex-col-reverse bg-moto-red lg:flex-row lg:items-stretch">
+        <div className="flex flex-col justify-end px-4 py-9 sm:px-8 lg:w-1/2 lg:px-12 lg:py-16">
+          <h1 className="display text-[clamp(3rem,13vw,6.25rem)] leading-[1.08] text-white lg:text-[clamp(3.5rem,6.6vw,6.25rem)]">
+            I&rsquo;m Bug, an avid motorcycle enthusiast and the creator of
+            BugMoto.
+          </h1>
+        </div>
+        <div className="relative aspect-[3/2] bg-ink lg:aspect-auto lg:min-h-[min(46vw,48rem)] lg:w-1/2">
+          <Image
+            src={helmetPhoto}
+            alt="Bug taking a wide-eyed selfie in a white helmet, with a motorcycle parked behind"
+            fill
+            priority
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover object-[48%_30%]"
+          />
+        </div>
+      </section>
+
+      <section className="page-gutter grid gap-12 py-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-20 lg:py-20">
+        <div className="flex max-w-[46rem] flex-col gap-6">
+          <p className={paragraph}>
+            My name is Dan Fellini, but on the mean streets of Portland
+            I&rsquo;m known as Bug.
+          </p>
+          <p className={paragraph}>
+            I live in the Pacific Northwest, but I was born and raised in the
+            Boston area. I&rsquo;m super passionate about motorcycles, and I
+            believe they are not only fun, viable transportation options, but
+            the key to a healthy, happy and youthful life.
+          </p>
+          <p className={paragraph}>
+            In my early 30s I gave up riding and moved to Portland, OR. Only
+            recently did I start riding again, and it&rsquo;s dramatically
+            changed my life.
+          </p>
+          <p className={paragraph}>
+            My goal with this channel is to inspire. To bring the same level of
+            enthusiasm I have for riding to my content, and hopefully spark
+            something within you.
+          </p>
+        </div>
+        <aside className="flex flex-col gap-6">
+          <div className="relative aspect-square w-full max-w-md lg:max-w-none">
             <Image
-              src={portraitImage}
-              alt=""
-              sizes="(min-width: 1024px) 32rem, 20rem"
-              className="aspect-square rotate-3 rounded-2xl bg-zinc-100 object-cover dark:bg-zinc-800"
+              src={desertPhoto}
+              alt="Bug leaning on a loaded adventure motorcycle in high desert hills under a big sky"
+              fill
+              sizes="(min-width: 1024px) 30vw, 28rem"
+              className="object-cover"
             />
           </div>
-        </div>
-        <div className="lg:order-first lg:row-span-2">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-            I'm Bug, an avid motorcycle enthusiast and the creator of BugMoto.
-          </h1>
-          <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
-            <p>
-              My name is Dan Fellini, but on the mean streets of Portland I'm
-              known as Bug.
-            </p>
-            <p>
-              I live in the Pacific Northwest, but I was born and raised in the
-              Boston area. I’m super passionate about motorcycles, and I believe
-              they are not only fun, viable transportation options, but the key
-              to a healthy, happy and youthful life.
-            </p>
-            <p>
-              In my early 30s I gave up riding and moved to Portland, OR. Only
-              recently did I start riding again, and it’s dramatically changed
-              my life.
-            </p>
-            <p>
-              My goal with this channel is to inspire. To bring the same level
-              of enthusiasm I have for riding to my content, and hopefully spark
-              something within you.
-            </p>
-            <p>
-              If you think you’re too old, too afraid, too whatever… Give it
-              another chance. Try riding and see if it changes you the way it’s
-              changed me.
-            </p>
-            <p>
-              When I'm not on a motorcycle, I'm probably coding. My background
-              is in software development, content production and journalism. I
-              have a mass communications (print journalism & radio) degree from
-              Emerson College in Boston, MA. and work as a software developer
-              for a Portland-based nonprofit.
-            </p>
-            <p>I'm happily married to LadyBug.</p>
+          <div>
+            <h2 className="display border-t-[5px] border-ink pt-3 text-[40px] leading-tight">
+              Find me
+            </h2>
+            <ul className="mt-2">
+              {FIND_ME_LINKS.map(({ href, label }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    className="inline-flex min-h-11 items-center text-xl font-semibold underline underline-offset-4 hover:text-moto-red-dark"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-        <div className="lg:pl-20">
-          <ul role="list">
-            <SocialLink
-              href="https://youtube.com/@bugmotochannel"
-              icon={YouTubeIcon}
-            >
-              Follow on YouTube
-            </SocialLink>
-            <SocialLink
-              href="https://instagram.com/bugmotochannel"
-              icon={InstagramIcon}
-              className="mt-4"
-            >
-              Follow on Instagram
-            </SocialLink>
+        </aside>
+      </section>
 
-            <SocialLink
-              href="mailto:dan@bugmoto.com"
-              icon={MailIcon}
-              className="mt-8 border-t border-zinc-100 pt-8 dark:border-zinc-700/40"
-            >
-              dan@bugmoto.com
-            </SocialLink>
-          </ul>
+      <section className="bg-ink text-white">
+        <div className="page-gutter py-14 lg:py-24">
+          <p className="display max-w-[22ch] text-[clamp(3rem,7vw,6.25rem)] leading-[1.1]">
+            If you think you&rsquo;re too old, too afraid, too whatever&hellip;{" "}
+            <span className="text-[#ff5a5a]">Give it another chance.</span>
+          </p>
+          <p className="mt-7 max-w-3xl text-[24px] leading-snug font-medium lg:text-[28px]">
+            Try riding and see if it changes you the way it&rsquo;s changed me.
+          </p>
         </div>
-      </div>
-    </Container>
+      </section>
+
+      <section className="page-gutter py-12 lg:py-20">
+        <div className="flex max-w-[46rem] flex-col gap-6">
+          <p className={paragraph}>
+            When I&rsquo;m not on a motorcycle, I&rsquo;m probably coding. My
+            background is in software development, content production and
+            journalism. I have a mass communications (print journalism &amp;
+            radio) degree from Emerson College in Boston, MA. and work as a
+            software developer for a Portland-based nonprofit.
+          </p>
+          <p className={paragraph}>I&rsquo;m happily married to LadyBug.</p>
+        </div>
+      </section>
+    </>
   );
 }

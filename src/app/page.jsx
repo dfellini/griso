@@ -1,289 +1,243 @@
 import Image from "next/image";
 import Link from "next/link";
-import clsx from "clsx";
-
-import { Button } from "@/components/Button";
-import { Card } from "@/components/Card";
-import { Container } from "@/components/Container";
-import { YouTubeIcon, InstagramIcon } from "@/components/SocialIcons";
-import image1 from "@/images/photos/bug-4.jpg";
-import image2 from "@/images/photos/bug-2.jpg";
-import image3 from "@/images/photos/bug-3.jpg";
-import image4 from "@/images/photos/bug-1.jpg";
-import image5 from "@/images/photos/bug-5.jpg";
-import { partners } from "@/lib/partners";
-import { FaMotorcycle, FaRegLightbulb } from "react-icons/fa";
 import he from "he";
 
-export default async function Home() {
-  // Uploads playlist (channel ID with "UC" -> "UU"). Unlike search.list, this
-  // is always current — the search index can lag new uploads by days.
-  const videos = await fetch(
-    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UU-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&key=${process.env.YOUTUBE_KEY}`,
-    { next: { revalidate: 180 } },
-  ).then((res) => res.json());
+import { Button } from "@/components/Button";
+import portrait from "@/images/photos/bugportrait.jpg";
+import { partners } from "@/lib/partners";
 
-  const items = videos?.items ?? [];
-  const firstVideoId = items[0]?.snippet?.resourceId?.videoId;
+const CHANNEL_URL = "https://youtube.com/@bugmotochannel";
 
-  return (
-    <>
-      <Container className="mt-9">
-        <h1 className="mb-8">
-          BugMoto: A passion for motorcycles and the places they take us.
-        </h1>
-        <div className="overline">Latest YouTube Video</div>
-        <iframe
-          src={`https://www.youtube.com/embed/${firstVideoId}`}
-          allowFullScreen
-          className="aspect-video mt-2 mb-8"
-        />
+async function getLatestVideos() {
+  try {
+    // Uploads playlist (channel ID with "UC" -> "UU"). Unlike search.list, this
+    // is always current — the search index can lag new uploads by days.
+    const response = await fetch(
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UU-GaHIsTlT1KUt5c4yWNUDA&maxResults=5&key=${process.env.YOUTUBE_KEY}`,
+      { next: { revalidate: 180 } },
+    );
 
-        <div className="max-w-2xl">
-          <h2 className="text-2xl font-bold tracking-tight text-zinc-800 sm:text-2xl dark:text-zinc-100">
-            Welcome to BugMoto. Let’s ride together.
-          </h2>
-          <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            Whether you&rsquo;re a seasoned rider, a returning motorcyclist, or
-            just someone who loves the open road, this is a space for inspiring
-            stories, insightful videos, and a few laughs along the way.
-            <br />
-            Join us in building a lasting community of ‘older’ riders who share
-            a passion for motorcycles, riding and living every moment.
-          </p>
-          <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400 text-right">
-            – bug
-          </p>
-          <div className="mt-6 flex gap-6">
-            <SocialLink
-              href="https://youtube.com/@bugmotochannel"
-              aria-label="Follow on YouTube"
-              icon={YouTubeIcon}
-            />
-            <SocialLink
-              href="https://www.instagram.com/bugmotochannel/"
-              aria-label="Follow on Instagram"
-              icon={InstagramIcon}
-            />
-          </div>
-        </div>
-      </Container>
-      <Photos />
-      <Container className="mt-24 md:mt-28">
-        <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
-          <div className="flex flex-col gap-4">
-            <div className="overline">More YouTube videos from BugMoto</div>
-            {/* Remove the first video since it's already displayed above */}
-            {items.slice(1).map((video) => (
-              <Video key={video.etag} video={video} />
-            ))}
-          </div>
-          <div className="space-y-10 lg:pl-16 xl:pl-24">
-            {/* <Newsletter /> */}
-            <PitchCard />
-            <Partners />
-          </div>
-        </div>
-      </Container>
-    </>
-  );
+    if (!response.ok) {
+      console.error(`Home page: YouTube returned ${response.status}.`);
+      return [];
+    }
+
+    const { items = [] } = await response.json();
+
+    return items.map(({ snippet }) => {
+      const [title, series] = he.decode(snippet.title).split(" | ");
+      const { maxres, standard, high } = snippet.thumbnails;
+
+      return {
+        id: snippet.resourceId.videoId,
+        title,
+        series,
+        thumbnail: (maxres ?? standard ?? high).url,
+        url: `https://www.youtube.com/watch?v=${snippet.resourceId.videoId}`,
+        publishedAt: snippet.publishedAt,
+      };
+    });
+  } catch (error) {
+    console.error("Home page: could not load videos from YouTube.", error);
+    return [];
+  }
 }
 
-function Photos() {
-  let rotations = [
-    "rotate-2",
-    "-rotate-2",
-    "rotate-2",
-    "rotate-2",
-    "-rotate-2",
-  ];
-
-  return (
-    <div className="mt-16 sm:mt-20">
-      <div className="-my-4 flex justify-center gap-5 overflow-hidden py-4 sm:gap-8">
-        {[image1, image2, image3, image4, image5].map((image, imageIndex) => (
-          <div
-            key={image.src}
-            className={clsx(
-              "relative w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800",
-              rotations[imageIndex % rotations.length],
-            )}
-          >
-            <div className="aspect-9/10">
-              <Image
-                src={image}
-                alt=""
-                sizes="(min-width: 640px) 18rem, 11rem"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+function formatDate(date) {
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
-function MailIcon(props) {
+function PlayIcon(props) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      {...props}
-    >
-      <path
-        d="M2.75 7.75a3 3 0 0 1 3-3h12.5a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H5.75a3 3 0 0 1-3-3v-8.5Z"
-        className="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"
-      />
-      <path
-        d="m4 6 6.024 5.479a2.915 2.915 0 0 0 3.952 0L20 6"
-        className="stroke-zinc-400 dark:stroke-zinc-500"
-      />
+    <svg viewBox="0 0 40 46" aria-hidden="true" {...props}>
+      <path d="M0 0 L40 23 L0 46 Z" fill="currentColor" />
     </svg>
   );
 }
 
-function Video({ video }) {
+function Hero({ latestUrl }) {
   return (
-    <>
-      <Card as="article" className="mb-2">
-        <Card.Title
-          href={`https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}`}
-        >
-          {he.decode(video.snippet.title)}
-        </Card.Title>
-        <Image
-          src={video.snippet.thumbnails.high.url}
-          alt={he.decode(video.snippet.title)}
-          width={640}
-          height={360}
-          className="rounded-md aspect-video object-cover mt-2"
-        />
-        <div className="text-xs mt-2 font-medium text-zinc-400 dark:text-zinc-500">
-          Released on {new Date(video.snippet.publishedAt).toLocaleDateString()}
+    <section className="flex flex-col-reverse bg-moto-red lg:flex-row lg:items-stretch">
+      <div className="flex flex-col justify-end gap-8 px-4 py-9 sm:px-8 lg:w-1/2 lg:px-12 lg:py-16">
+        <h1 className="display text-[clamp(4rem,19.5vw,8.25rem)] leading-[1.1] text-white lg:text-[clamp(4rem,9.2vw,8.25rem)]">
+          Die young.
+          <br />
+          As late as
+          <br />
+          possible.
+        </h1>
+        <div className="flex flex-wrap gap-3.5">
+          <Button href={CHANNEL_URL} className="w-full sm:w-auto">
+            Subscribe on YouTube
+          </Button>
+          <Button
+            href={latestUrl}
+            variant="outline"
+            className="w-full sm:w-auto"
+          >
+            Watch the latest
+          </Button>
         </div>
-
-        <Card.Cta>Watch the video on YouTube</Card.Cta>
-      </Card>
-      <hr className="border-zinc-200 dark:border-zinc-500/40" />
-    </>
-  );
-}
-
-function SocialLink({ icon: Icon, ...props }) {
-  return (
-    <Link className="group -m-1 p-1" {...props}>
-      <Icon className="h-6 w-6 fill-zinc-500 transition group-hover:fill-zinc-600 dark:fill-zinc-400 dark:group-hover:fill-zinc-300" />
-    </Link>
-  );
-}
-
-function Newsletter() {
-  return (
-    <form
-      action="/thank-you"
-      className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40"
-    >
-      <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-        <MailIcon className="h-6 w-6 flex-none" />
-        <span className="ml-3">Stay up to date</span>
-      </h2>
-      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-        Get notified when I publish something new, and unsubscribe at any time.
-      </p>
-      <div className="mt-6 flex items-center">
-        <span className="flex min-w-0 flex-auto p-px">
-          <input
-            type="email"
-            placeholder="Email address"
-            aria-label="Email address"
-            required
-            className="w-full appearance-none rounded-[calc(var(--radius-md)-1px)] bg-white px-3 py-[calc(--spacing(2)-1px)] shadow-md shadow-zinc-800/5 outline outline-zinc-900/10 placeholder:text-zinc-400 focus:ring-4 focus:ring-teal-500/10 focus:outline-teal-500 sm:text-sm dark:bg-zinc-700/15 dark:text-zinc-200 dark:outline-zinc-700 dark:placeholder:text-zinc-500 dark:focus:ring-teal-400/10 dark:focus:outline-teal-400"
-          />
-        </span>
-        <Button type="submit" className="ml-4 flex-none">
-          Join
-        </Button>
       </div>
-    </form>
-  );
-}
-
-function Company({ company }) {
-  return (
-    <li className="flex gap-4">
-      <div className={clsx(
-          "relative mt-1 flex h-12 w-12 flex-none items-center justify-center rounded-full shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:ring-0",
-          company.logoBg ?? "bg-gray-500 dark:bg-zinc-800",
-        )}>
+      <div className="relative aspect-[3839/4030] bg-ink lg:aspect-auto lg:min-h-[min(54vw,56rem)] lg:w-1/2">
         <Image
-          src={company.logo}
-          alt=""
-          className="h-12 w-12 object-contain"
-          unoptimized
+          src={portrait}
+          alt="Bug in a helmet with a yellow chin bar, leaning on a loaded Triumph motorcycle on an open road under a teal sky"
+          fill
+          priority
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="object-cover object-[50%_40%]"
         />
       </div>
-      <dl className="flex flex-auto flex-wrap gap-x-2">
-        <dt className="sr-only">Company</dt>
-        <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          <a href={company?.link}>{company.company}</a>
-        </dd>
-        <dt className="sr-only">Products</dt>
-        <dd className="text-xs text-zinc-500 dark:text-zinc-400">
-          {company.title}
-        </dd>
-      </dl>
-    </li>
+    </section>
   );
 }
 
-function PitchCard() {
+function LatestVideo({ video }) {
   return (
-    <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
-      <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-        <FaRegLightbulb className="h-6 w-6 flex-none" />
-        <Link href="/pitch" className="ml-3 hover:text-teal-500">
-          Got a video idea?
-        </Link>
-      </h2>
-      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-        I&rsquo;m always looking for ideas. Tell me what you&rsquo;d like to see
-        on the channel.
+    <section className="bg-ink text-white">
+      <p className="page-gutter label pt-7 text-[clamp(1.5rem,2.2vw,1.875rem)] leading-tight tracking-[0.02em]">
+        A passion for motorcycles and the places they take us.
       </p>
-      <Link
-        href="/pitch"
-        className="mt-6 inline-block text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
-      >
-        Pitch me a video &rarr;
-      </Link>
-    </div>
+      <div className="page-gutter grid gap-6 pt-8 pb-11 lg:grid-cols-[2fr_1fr] lg:items-end lg:gap-12 lg:pt-10 lg:pb-24">
+        <a
+          href={video.url}
+          aria-label={`Watch ${video.title} on YouTube`}
+          className="group relative block"
+        >
+          <Image
+            src={video.thumbnail}
+            alt=""
+            width={1280}
+            height={720}
+            sizes="(min-width: 1024px) 66vw, 100vw"
+            className="aspect-video w-full object-cover"
+          />
+          <span className="absolute bottom-0 left-0 flex h-16 w-16 items-center justify-center bg-moto-red text-white transition-colors group-hover:bg-moto-red-dark lg:h-[104px] lg:w-[104px]">
+            <PlayIcon className="h-7 w-6 lg:h-[46px] lg:w-10" />
+          </span>
+        </a>
+        <div className="flex flex-col gap-4 lg:gap-6">
+          <p className="label text-[21px] font-bold tracking-[0.08em] text-[#ff5a5a] lg:text-2xl">
+            Latest video
+            {video.series && ` / ${video.series}`}
+          </p>
+          <h2 className="display text-[40px] leading-[1.12] lg:text-[clamp(3rem,4.4vw,4rem)] lg:leading-[1.08]">
+            {video.title}
+          </h2>
+          <a
+            href={video.url}
+            className="label inline-flex min-h-11 items-center text-[26px] font-bold underline-offset-[6px] hover:underline"
+          >
+            Watch on YouTube &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }
 
-function Partners() {
+function RecentVideos({ videos }) {
   return (
-    <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
-      <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-        <FaMotorcycle className="h-6 w-6 flex-none" />
-        <Link href="/partners" className="ml-3 hover:text-teal-500">
-          Channel partners, supporters & friends
-        </Link>
+    <section className="page-gutter py-10 lg:py-24">
+      <h2 className="display mb-5 text-[52px] leading-[1.04] lg:mb-10 lg:text-[88px] lg:leading-none">
+        Also on the channel
       </h2>
-      <ol className="mt-6 space-y-4">
-        {partners.map((company) => (
-          <Company key={company.company} company={company} />
+      <ol className="border-t-[5px] border-ink lg:border-t-[6px]">
+        {videos.map((video, index) => (
+          <li key={video.id} className="border-b-2 border-ink">
+            <a
+              href={video.url}
+              className="group grid grid-cols-[46px_1fr] gap-x-3.5 py-[18px] sm:grid-cols-[70px_1fr] lg:grid-cols-[96px_1fr_110px_240px] lg:items-center lg:gap-x-10 lg:py-6"
+            >
+              <span className="display text-[34px] leading-[1.1] text-moto-red-dark sm:text-5xl lg:text-[64px] lg:leading-none">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="display text-[27px] leading-[1.16] underline-offset-4 group-hover:underline sm:text-[34px] lg:text-[clamp(2rem,3vw,2.75rem)] lg:leading-[1.12]">
+                {video.title}
+              </span>
+              <span className="col-start-2 mt-2 text-[17px] font-medium lg:col-start-auto lg:mt-0 lg:text-[19px]">
+                {formatDate(video.publishedAt)}
+              </span>
+              <Image
+                src={video.thumbnail}
+                alt=""
+                width={480}
+                height={270}
+                sizes="240px"
+                className="hidden aspect-video w-[240px] object-cover lg:block"
+              />
+            </a>
+          </li>
         ))}
       </ol>
-      <Link
-        href="/partners"
-        className="mt-6 inline-block text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
-      >
-        Learn more about our partners &rarr;
-      </Link>
-    </div>
+    </section>
+  );
+}
+
+function PitchAndPartners() {
+  return (
+    <section className="flex flex-col lg:flex-row lg:items-stretch">
+      <div className="flex flex-col items-start gap-5 bg-moto-red px-4 py-10 sm:px-8 lg:w-1/2 lg:gap-6 lg:px-12 lg:py-[72px]">
+        <h2 className="display text-[60px] leading-[1.04] text-white lg:text-[96px] lg:leading-[1.02]">
+          Got an idea?
+          <br />
+          Pitch me.
+        </h2>
+        <p className="max-w-[500px] text-[19px] leading-[1.45] font-medium lg:text-[22px]">
+          A road worth riding, gear worth testing, a question you&rsquo;d like
+          answered. Tell me about it.
+        </p>
+        <Button href="/pitch" className="w-full sm:w-auto">
+          Pitch a video
+        </Button>
+      </div>
+      <div className="bg-ink px-4 py-10 text-white sm:px-8 lg:w-1/2 lg:px-12 lg:py-[72px]">
+        <h2 className="display mb-7 text-[44px] leading-[1.05] lg:text-[56px]">
+          <Link href="/partners" className="hover:underline">
+            Partners, supporters &amp; friends
+          </Link>
+        </h2>
+        <ul className="grid gap-x-8 gap-y-1 sm:grid-cols-2">
+          {partners.map((partner) => (
+            <li key={partner.company}>
+              <a
+                href={partner.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center font-condensed text-[27px] leading-tight font-semibold underline-offset-4 hover:underline"
+              >
+                {partner.company}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <Link
+          href="/partners"
+          className="label mt-5 inline-flex min-h-11 items-center text-2xl font-bold underline-offset-[6px] hover:underline"
+        >
+          Meet the partners &rarr;
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+export default async function Home() {
+  const videos = await getLatestVideos();
+  const [latest, ...recent] = videos;
+
+  return (
+    <>
+      <Hero latestUrl={latest?.url ?? CHANNEL_URL} />
+      {latest && <LatestVideo video={latest} />}
+      {recent.length > 0 && <RecentVideos videos={recent} />}
+      <PitchAndPartners />
+    </>
   );
 }

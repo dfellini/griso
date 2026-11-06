@@ -1,42 +1,33 @@
-import Link from "next/link";
+import Link from 'next/link'
 
-import { ContainerInner, ContainerOuter } from "@/components/Container";
-
-function NavLink({ href, children }) {
-  return (
-    <Link
-      href={href}
-      className="transition hover:text-teal-500 dark:hover:text-teal-400"
-    >
-      {children}
-    </Link>
-  );
-}
+const FOOTER_LINKS = [
+  { href: 'https://youtube.com/@bugmotochannel', label: 'YouTube' },
+  { href: 'https://www.instagram.com/bugmotochannel/', label: 'Instagram' },
+  { href: '/about', label: 'About Bug' },
+  { href: '/partners', label: 'Partners' },
+  { href: '/pitch', label: 'Pitch a Video' },
+]
 
 export function Footer() {
   return (
-    <footer className="mt-32 flex-none">
-      <ContainerOuter>
-        <div className="border-t border-zinc-100 pt-10 pb-16 dark:border-zinc-700/40">
-          <ContainerInner>
-            <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-              <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                <NavLink href="https://youtube.com/@bugmotochannel">
-                  YouTube
-                </NavLink>
-                <NavLink href="https://www.instagram.com/bugmotochannel/">
-                  Instagram
-                </NavLink>
-                <NavLink href="/about">About Bug</NavLink>
-                <NavLink href="/pitch">Pitch a Video</NavLink>
-              </div>
-              <p className="text-sm text-zinc-400 dark:text-zinc-500">
-                &copy; {new Date().getFullYear()} BugMoto. All rights reserved.
-              </p>
-            </div>
-          </ContainerInner>
-        </div>
-      </ContainerOuter>
+    <footer className="border-t-2 border-ink bg-white">
+      <div className="page-gutter flex flex-wrap items-center justify-between gap-x-10 gap-y-4 py-8">
+        <ul className="label flex flex-wrap gap-x-8 gap-y-1 text-[22px]">
+          {FOOTER_LINKS.map(({ href, label }) => (
+            <li key={href}>
+              <Link
+                href={href}
+                className="inline-flex min-h-11 items-center underline-offset-[6px] hover:underline"
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="text-[17px] font-medium">
+          &copy; {new Date().getFullYear()} BugMoto. All rights reserved.
+        </p>
+      </div>
     </footer>
-  );
+  )
 }

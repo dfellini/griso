@@ -7,28 +7,23 @@ import { Button } from "@/components/Button";
 import { PITCH_LIMITS, VIDEO_TYPES } from "@/lib/pitch";
 
 const inputStyles =
-  "w-full appearance-none rounded-[calc(var(--radius-md)-1px)] bg-white px-3 py-[calc(--spacing(2)-1px)] shadow-md shadow-zinc-800/5 outline outline-zinc-900/10 placeholder:text-zinc-400 focus:ring-4 focus:ring-teal-500/10 focus:outline-teal-500 sm:text-sm dark:bg-zinc-700/15 dark:text-zinc-200 dark:outline-zinc-700 dark:placeholder:text-zinc-500 dark:focus:ring-teal-400/10 dark:focus:outline-teal-400 aria-invalid:outline-red-500 dark:aria-invalid:outline-red-400";
+  "w-full appearance-none rounded-none border-2 border-ink bg-white px-3.5 py-3 text-[19px] leading-snug font-medium text-ink focus:outline-4 focus:outline-offset-0 focus:outline-moto-red aria-invalid:border-moto-error aria-invalid:bg-red-50";
 
-function Field({ name, label, hint, error, children }) {
+function Field({ name, label, hint, error, className, children }) {
   return (
-    <div>
+    <div className={className}>
       <label
         htmlFor={`pitch-${name}`}
-        className="block text-sm font-medium text-zinc-900 dark:text-zinc-100"
+        className="mb-2 block font-condensed text-[22px] leading-tight font-bold tracking-[0.02em]"
       >
         {label}
-        {hint && (
-          <span className="font-normal text-zinc-500 dark:text-zinc-400">
-            {" "}
-            ({hint})
-          </span>
-        )}
+        {hint && ` (${hint})`}
       </label>
-      <div className="mt-2 p-px">{children}</div>
+      {children}
       {error && (
         <p
           id={`pitch-${name}-error`}
-          className="mt-2 text-sm text-red-600 dark:text-red-400"
+          className="mt-2 text-[17px] font-semibold text-moto-error"
         >
           {error}
         </p>
@@ -58,14 +53,11 @@ export function PitchForm() {
 
   if (state.status === "success") {
     return (
-      <div
-        role="status"
-        className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40"
-      >
-        <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+      <div role="status" className="max-w-2xl">
+        <h2 className="display text-[clamp(3.5rem,6vw,5.5rem)] leading-[1.05]">
           Thanks, I got your pitch!
         </h2>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-5 text-[22px] leading-snug font-medium">
           I appreciate you taking the time to share it. Ride safe.
         </p>
       </div>
@@ -75,31 +67,33 @@ export function PitchForm() {
   const selectedType = state.values?.type ?? VIDEO_TYPES[0];
 
   return (
-    <form action={formAction} className="space-y-6">
-      <div className="grid gap-6 sm:grid-cols-2">
-        <Field name="name" label="Your name" error={state.errors?.name}>
-          <input
-            type="text"
-            autoComplete="name"
-            required
-            {...fieldProps("name", state)}
-          />
-        </Field>
-        <Field
-          name="youtube"
-          label="YouTube handle"
-          hint="if you have one"
-          error={state.errors?.youtube}
-        >
-          <input type="text" {...fieldProps("youtube", state)} />
-        </Field>
-      </div>
+    <form
+      action={formAction}
+      className="grid items-end gap-x-7 gap-y-6 sm:grid-cols-2"
+    >
+      <Field name="name" label="Your name" error={state.errors?.name}>
+        <input
+          type="text"
+          autoComplete="name"
+          required
+          {...fieldProps("name", state)}
+        />
+      </Field>
+      <Field
+        name="youtube"
+        label="YouTube handle"
+        hint="if you have one"
+        error={state.errors?.youtube}
+      >
+        <input type="text" {...fieldProps("youtube", state)} />
+      </Field>
 
       <Field
         name="email"
         label="Email"
         hint="only if you'd like a reply"
         error={state.errors?.email}
+        className="sm:col-span-2"
       >
         <input
           type="email"
@@ -108,57 +102,47 @@ export function PitchForm() {
         />
       </Field>
 
-      <div className="grid gap-6 sm:grid-cols-[2fr_1fr]">
-        <Field
-          name="title"
-          label="Video idea in a nutshell (just a few words)"
-          error={state.errors?.title}
-        >
-          <input type="text" required {...fieldProps("title", state)} />
-        </Field>
-        <Field name="type" label="Video type" error={state.errors?.type}>
-          {/* A select doesn't pick up a new defaultValue after React resets the
-              form, so the key remounts it with the submitted value. */}
-          <div className="relative">
-            <select
-              key={selectedType}
-              required
-              {...fieldProps("type", state)}
-              defaultValue={selectedType}
-              className={`${inputStyles} pr-9`}
-            >
-              {VIDEO_TYPES.map((type) => (
-                <option
-                  key={type}
-                  value={type}
-                  className="dark:bg-zinc-800 dark:text-zinc-200"
-                >
-                  {type}
-                </option>
-              ))}
-            </select>
-            <svg
-              viewBox="0 0 8 6"
-              aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 right-3 h-auto w-2 -translate-y-1/2 fill-none stroke-zinc-500 dark:stroke-zinc-400"
-            >
-              <path
-                d="M1.75 1.75 4 4.25l2.25-2.5"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-        </Field>
-      </div>
+      <Field
+        name="title"
+        label="Video idea in a nutshell (just a few words)"
+        error={state.errors?.title}
+      >
+        <input type="text" required {...fieldProps("title", state)} />
+      </Field>
+      <Field name="type" label="Video type" error={state.errors?.type}>
+        {/* A select doesn't pick up a new defaultValue after React resets the
+            form, so the key remounts it with the submitted value. */}
+        <div className="relative">
+          <select
+            key={selectedType}
+            required
+            {...fieldProps("type", state)}
+            defaultValue={selectedType}
+            className={`${inputStyles} pr-10`}
+          >
+            {VIDEO_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+          <svg
+            viewBox="0 0 8 6"
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 right-3.5 h-auto w-3 -translate-y-1/2 fill-none stroke-ink"
+          >
+            <path d="M1.75 1.75 4 4.25l2.25-2.5" strokeWidth="1.5" />
+          </svg>
+        </div>
+      </Field>
 
       <Field
         name="description"
         label="Describe your idea"
         error={state.errors?.description}
+        className="sm:col-span-2"
       >
-        <textarea rows={6} required {...fieldProps("description", state)} />
+        <textarea rows={5} required {...fieldProps("description", state)} />
       </Field>
 
       <Field
@@ -166,8 +150,9 @@ export function PitchForm() {
         label="Why would other riders want to watch?"
         hint="optional"
         error={state.errors?.why}
+        className="sm:col-span-2"
       >
-        <textarea rows={3} {...fieldProps("why", state)} />
+        <textarea rows={2} {...fieldProps("why", state)} />
       </Field>
 
       <Field
@@ -175,6 +160,7 @@ export function PitchForm() {
         label="Location or bike involved"
         hint="optional"
         error={state.errors?.location}
+        className="sm:col-span-2"
       >
         <input type="text" {...fieldProps("location", state)} />
       </Field>
@@ -191,33 +177,43 @@ export function PitchForm() {
         />
       </div>
 
-      <label className="flex items-start gap-3 text-sm text-zinc-600 dark:text-zinc-400">
+      <label className="flex min-h-11 items-center gap-3 text-[19px] leading-snug font-medium sm:col-span-2">
         <input
           type="checkbox"
           name="credit"
           defaultChecked={state.values?.credit ?? false}
-          className="mt-0.5 h-4 w-4 flex-none accent-teal-500"
+          className="h-[26px] w-[26px] flex-none accent-moto-red-dark"
         />
         OK to mention my name if this becomes a video
       </label>
 
       {state.status === "error" && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+        <p
+          role="alert"
+          className="text-[19px] font-semibold text-moto-error sm:col-span-2"
+        >
           {state.message}
         </p>
       )}
 
       {state.status === "invalid" && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+        <p
+          role="alert"
+          className="text-[19px] font-semibold text-moto-error sm:col-span-2"
+        >
           Please fix the highlighted fields and try again.
         </p>
       )}
 
-      <div>
-        <Button type="submit" disabled={isPending}>
+      <div className="flex flex-col items-start gap-3.5 sm:col-span-2">
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="w-full cursor-pointer text-[26px] sm:w-auto"
+        >
           {isPending ? "Sending…" : "Send my pitch"}
         </Button>
-        <p className="mt-4 text-xs text-zinc-500 dark:text-zinc-400">
+        <p className="text-base leading-normal text-zinc-700">
           By submitting, you&rsquo;re OK with me using your idea in a video,
           without payment. Your email is only used to reply to you.
         </p>

@@ -6,7 +6,7 @@ Tailwind Labs Inc. grants you an on-going, non-exclusive license to use the Comp
 
 The license grants permission to **one individual** (the Licensee) to access and use the Components and Templates.
 
-You **can**:
+You **can**: !!!
 
 - Use the Components and Templates to create unlimited End Products.
 - Modify the Components and Templates to create derivative components and templates. Those components and templates are subject to this license.

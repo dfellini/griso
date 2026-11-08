@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/Button";
-import portrait from "@/images/photos/bugportrait.jpg";
+import heroPhoto from "@/images/photos/herodan.jpg";
 import { partnerLinkRel, partners } from "@/lib/partners";
 import { CHANNEL_URL } from "@/lib/site";
 import { formatVideoDate, getLatestVideos } from "@/lib/youtube";
@@ -31,7 +31,7 @@ function PlayIcon(props) {
 function Hero({ latestUrl }) {
   return (
     <section className="flex flex-col-reverse bg-moto-red lg:flex-row lg:items-stretch">
-      <div className="flex flex-col justify-end gap-8 px-4 py-9 sm:px-8 lg:w-1/2 lg:px-12 lg:py-16">
+      <div className="flex flex-col justify-center gap-8 px-4 py-9 sm:px-8 lg:w-1/2 lg:px-12 lg:py-16">
         <h1 className="display text-[clamp(4rem,19.5vw,8.25rem)] leading-[1.1] text-white lg:text-[clamp(4rem,9.2vw,8.25rem)]">
           Die young.
           <br />
@@ -52,14 +52,14 @@ function Hero({ latestUrl }) {
           </Button>
         </div>
       </div>
-      <div className="relative aspect-[3839/4030] bg-ink lg:aspect-auto lg:min-h-[min(54vw,56rem)] lg:w-1/2">
+      <div className="relative aspect-[5382/4037] bg-ink lg:aspect-auto lg:min-h-[min(54vw,56rem)] lg:w-1/2">
         <Image
-          src={portrait}
-          alt="Bug in a helmet with a yellow chin bar, leaning on a loaded Triumph motorcycle on an open road under a teal sky"
+          src={heroPhoto}
+          alt="Bug in a gray riding suit and black helmet, leaning on a black BMW motorcycle with gold forks under a cloudy autumn sky"
           fill
           priority
           sizes="(min-width: 1024px) 50vw, 100vw"
-          className="object-cover object-[50%_40%]"
+          className="object-cover object-[47%_50%]"
         />
       </div>
     </section>

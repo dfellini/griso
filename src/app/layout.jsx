@@ -1,5 +1,6 @@
 import { Anton, Barlow, Barlow_Condensed } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 import { Layout } from '@/components/Layout'
 import { JsonLd } from '@/components/JsonLd'
@@ -55,6 +56,13 @@ export const metadata = {
   },
 }
 
+// Only the live site reports to Google Analytics, so local development and
+// Vercel preview deploys don't add test visits to the stats.
+const googleAnalyticsId =
+  process.env.VERCEL_ENV === 'production'
+    ? process.env.GOOGLE_ANALYTICS_ID
+    : undefined
+
 export const viewport = {
   themeColor: '#0b0b0b',
 }
@@ -70,6 +78,7 @@ export default function RootLayout({ children }) {
         <Layout>{children}</Layout>
         <Analytics />
       </body>
+      {googleAnalyticsId && <GoogleAnalytics gaId={googleAnalyticsId} />}
     </html>
   )
 }

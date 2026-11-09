@@ -21,6 +21,7 @@ Set these in `.env.local` for local development and in the Vercel project settin
 | `RESEND_API_KEY` | Sending video pitches from `/pitch` through Resend |
 | `PITCH_TO_EMAIL` | The address that receives pitches |
 | `PITCH_FROM_EMAIL` | The sender, on a domain verified in Resend |
+| `GOOGLE_ANALYTICS_ID` | The Google Analytics measurement ID (`G-…`). Only used on production deploys |
 
 ## License
 

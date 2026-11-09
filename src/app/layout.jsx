@@ -33,10 +33,10 @@ export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     template: '%s - BugMoto',
-    default: 'BugMoto: Motorcycle Reviews, Rides & Stories for Older Riders',
+    default: 'BugMoto: Motorcycle Travel Stories for Seasoned Riders',
   },
   description:
-    'Motorcycle reviews, ride stories and how-tos from Bug, a Portland rider who got back on two wheels later in life. For seasoned, returning and older riders.',
+    'Motorcycle travel stories from Bug, a Portland rider who got back on two wheels later in life. Overnights, long roads, and the questions they raise.',
   robots: {
     index: true,
     follow: true,

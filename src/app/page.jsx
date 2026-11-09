@@ -10,9 +10,9 @@ import { formatVideoDate, getLatestVideos } from "@/lib/youtube";
 export const metadata = {
   alternates: { canonical: "/" },
   openGraph: {
-    title: "BugMoto: Motorcycle Reviews, Rides & Stories for Older Riders",
+    title: "BugMoto: Motorcycle Travel Stories for Seasoned Riders",
     description:
-      "Motorcycle reviews, ride stories and how-tos from Bug, a Portland rider who got back on two wheels later in life. For seasoned, returning and older riders.",
+      "Motorcycle travel stories from Bug, a Portland rider who got back on two wheels later in life. Overnights, long roads, and the questions they raise.",
     url: "/",
     siteName: "BugMoto",
     type: "website",

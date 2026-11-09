@@ -32,13 +32,18 @@ function Hero({ latestUrl }) {
   return (
     <section className="flex flex-col-reverse bg-moto-red lg:flex-row lg:items-stretch">
       <div className="flex flex-col justify-center gap-8 px-4 py-9 sm:px-8 lg:w-1/2 lg:px-12 lg:py-16">
-        <h1 className="display text-[clamp(4rem,19.5vw,8.25rem)] leading-[1.1] text-white lg:text-[clamp(4rem,9.2vw,8.25rem)]">
-          Die young.
-          <br />
-          As late as
-          <br />
-          possible.
-        </h1>
+        <div>
+          <h1 className="label text-base leading-snug tracking-[0.12em] lg:text-lg">
+            Motorcycle travel and reflection for seasoned riders
+          </h1>
+          <p className="display mt-3 text-[clamp(4rem,19.5vw,8.25rem)] leading-[1.1] text-white lg:text-[clamp(4rem,9.2vw,8.25rem)]">
+            Die young.
+            <br />
+            As late as
+            <br />
+            possible.
+          </p>
+        </div>
         <div className="flex flex-wrap gap-3.5">
           <Button href={CHANNEL_URL} className="w-full sm:w-auto">
             Subscribe on YouTube
@@ -70,7 +75,7 @@ function LatestVideo({ video }) {
   return (
     <section className="bg-ink text-white">
       <p className="page-gutter label pt-7 text-[clamp(1.5rem,2.2vw,1.875rem)] leading-tight tracking-[0.02em]">
-        A passion for motorcycles and the places they take us.
+        The bike is the vehicle. The rider is the subject.
       </p>
       <div className="page-gutter grid gap-6 pt-8 pb-11 lg:grid-cols-[2fr_1fr] lg:items-end lg:gap-12 lg:pt-10 lg:pb-24">
         <Link
